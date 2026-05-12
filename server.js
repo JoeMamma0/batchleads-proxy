@@ -1,13 +1,19 @@
 const express = require("express");
-const cors = require("cors");
 const fetch = require("node-fetch");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const BATCHLEADS_API_KEY = process.env.BATCHLEADS_API_KEY;
 
-app.use(cors());
 app.use(express.json());
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") return res.sendStatus(200);
+  next();
+});
 
 app.get("/", (req, res) => {
   res.json({ status: "BatchLeads Proxy is running" });
